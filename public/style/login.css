@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #E5E5E5;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+h1 {
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    font-size: 1rem;
+    color: #000;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #E2E2E2;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+}
+
+input:focus {
+    border-color: #DC2626;
+}
+
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toggle-password img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.toggle-password:hover img {
+    opacity: 0.8;
+}
+
+.forgot-password {
+    text-align: right;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.forgot-password a {
+    color: #2563EB;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 100%;
+    background-color: #DC2626;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-button:hover {
+    background-color: #B91C1C;
+}
+
+.message {
+    color:#DC2626;
+    font-size: 0.6rem;
+}

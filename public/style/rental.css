@@ -1,0 +1,482 @@
+/* style/app.css (atau nama file CSS utama Anda) */
+
+/* Reset & Basic Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif; /* Pastikan font ini diimpor atau tersedia */
+}
+
+/* CSS Variables */
+:root {
+    --primary-color: #ff9800;
+    --primary-light: #ffb74d;
+    --primary-dark: #f57c00;
+    --secondary-color: #2196f3;
+    --secondary-light: #64b5f6;
+    --secondary-dark: #1976d2;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --white: #ffffff;
+    --black: #000000;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    --background: #f8f9fa;
+    --primary: #e63946; /* Merah untuk aktif/utama */
+    --secondary: #f4a261;
+    --accent: #457b9d; /* Biru keabu-abuan untuk border card */
+    --text: #212529;
+    --border: #e9ecef;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --blue:#0077ff;
+    --blue-dark:#003573;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: sans-serif;
+    line-height: 1.6;
+}
+
+/* Main Layout Container */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    padding: 1.5rem;
+    width: 100%;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+
+header button img {
+    width: 24px;
+}
+
+#toggleSidebar img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: none;
+}
+
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    background: #f44336;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+}
+
+header h1 {
+    font-size: 36px;
+    text-align: left;
+    margin: 10px;
+    width: 100%;
+}
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-menu span img {
+    width: 24px;
+    margin-left: 10px;
+}
+
+
+.notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.notification::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+/* Add New Project Section */
+.new-project-btn {
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0.5rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-left: auto;
+  }
+.new-project-btn img {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    margin-right: 10px;
+}
+  .new-project-btn:hover {
+    background-color: var(--blue-dark);
+  }
+  
+  .new-project-btn i {
+    margin-right: 0.5rem;
+  }
+
+
+/* Modal Styles */
+.add-project-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+.add-project-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-project {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(-20px);
+  transition: var(--transition);
+}
+
+.add-project-overlay.active .add-asset {
+  transform: translateY(0);
+}
+
+.add-project-header {
+  padding: 1.5rem;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-project-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.add-project-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #fff;
+  transition: var(--transition);
+}
+
+.add-project-close:hover {
+  color: #000000;
+}
+
+.add-project-body {
+  padding: 1.5rem;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--gray-700);
+}
+
+.form-control {
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* dua kolom */
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+
+.modal-footer {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--gray-300);
+  gap: 0.75rem;
+}
+.btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-outline {
+  background-color: var(--white);
+  border: 1px solid var(--gray-300);
+  color: var(--gray-700);
+}
+
+.btn-outline:hover {
+  background-color: var(--gray-100);
+}
+
+.btn-primary {
+  background-color: var(--blue);
+  color: var(--white);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-dark);
+}
+
+
+/* Tempilan Card Project */
+.existing-projects-dashboard {
+    margin-top: 30px;
+    padding: 0 10px;
+}
+
+.existing-projects-dashboard h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--text); 
+    text-align: left;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 6px solid var(--accent); /* Biru keabu-abuan */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.project-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.project-card p {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    margin-bottom: 5px;
+}
+
+.project-card .view-project-btn {
+    display: inline-block;
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 8px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+    align-self: flex-start; /* Posisikan tombol di kiri bawah kartu */
+}
+
+.project-card .view-project-btn:hover {
+    background-color: var(--blue-dark);
+}
+
+
+/* --- Responsive Adjustments --- */
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px; /* Sedikit lebih kecil di tablet */
+    }
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    .project-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed; /* Sidebar menjadi fixed untuk mobile */
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        transform: translateX(-100%); /* Sembunyikan default */
+        width: 250px; /* Berikan lebar tetap saat terbuka */
+    }
+
+    .sidebar.active {
+        transform: translateX(0); /* Tampilkan sidebar saat aktif */
+    }
+
+    .sidebar-toggle {
+        display: block; /* Tampilkan tombol toggle di header mobile */
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    header {
+        flex-wrap: wrap; /* Izinkan header wrap elemen */
+        justify-content: flex-start;
+        gap: 15px;
+    }
+    header h1 {
+        flex-basis: 100%; /* Judul mengambil seluruh lebar */
+        text-align: center;
+        order: -1; /* Pindahkan judul ke atas jika perlu */
+        font-size: 1.5rem;
+    }
+    .user-menu {
+        flex-grow: 1;
+        justify-content: flex-end; /* Dorong menu user ke kanan */
+    }
+
+    .add-new-project-section {
+        justify-content: center; /* Tombol tambah project di tengah */
+        padding: 0;
+    }
+
+    .btn-add-project {
+        width: 100%; /* Buat tombol full width di mobile */
+        text-align: center;
+        justify-content: center;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr; /* Satu kolom di mobile */
+        padding: 0;
+    }
+    .project-card {
+        max-width: 100%; /* Ambil lebar penuh */
+        margin: 0 auto;
+    }
+
+    .modal {
+        width: 95%;
+        max-width: 95%; /* Sesuaikan modal di mobile */
+    }
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+    .wizard-steps {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .wizard-step {
+        margin: 5px; /* Jarak antar langkah wizard */
+    }
+}
+
+/* Tambahan CSS jika Anda ingin menargetkan class khusus untuk gambar di nav-link */
+.nav-link .icon img {
+    /* Pastikan filter ini sesuai dengan warna default icon Anda */
+    /* Misalnya, jika icon Anda hitam, dan Anda ingin jadi merah saat tidak aktif */
+    /* filter: brightness(0) saturate(100%) invert(27%) sepia(87%) saturate(5061%) hue-rotate(345deg) brightness(97%) contrast(101%); */
+    /* Atau jika icon Anda abu-abu dan ingin menjadi hitam */
+    /* filter: grayscale(100%); */
+}
+
+/* Jika Anda ingin panah dropdown juga berubah warna saat parent aktif */
+.nav-item.has-submenu.active-parent > .nav-link .dropdown-arrow {
+    /* filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%); /* Membuat panah putih */
+}
