@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tagihan', function (Blueprint $table) {
+       Schema::create('detailasset', function (Blueprint $table) {
             $table->id();
-            $table->integer('nomor_invoice')->unique();
-            $table->string('keterangan');
-            $table->date('tanggal_tagihan');
+            $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
+            $table->string('serialnumber', 50)->unique();
+            $table->enum('kondisi',['normal','rusak']);
             $table->timestamps();
         });
-
+ 
     }
 
     /**
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tagihan');
+        Schema::dropIfExists('detailasset');
     }
 };

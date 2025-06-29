@@ -28,16 +28,17 @@ Route::post('/asset/add', [AssetController::class, 'addasset'])->name('addasset'
 Route::get('/rental', [RentalController::class, 'rental'])->name('management-asset/rental');
 Route::post('/project/add', [RentalController::class, 'addproject'])->name('addproject');
 
-Route::get('/project/{project}', [RentalIdController::class, 'projecttampil'])->name('project.tampil');
+Route::get('/project/{project}', [PengirimanController::class, 'projecttampil'])->name('project.tampil');
 
-Route::get('/pengiriman/{project}/dashboard-pengiriman', [PengirimanController::class, 'pengirimanByProject'])->name('components.pengiriman');
+Route::get('/pengiriman/{project}/dashboard-pengiriman', [PengirimanController::class, 'pengiriman'])->name('components.pengiriman');
 Route::post('/pengiriman', [PengirimanController::class, 'kirim'])->name('kirim');
 
 Route::get ('/project/{project}/dashboard-tagihan', [TagihanController::class, 'tagihanrental'])->name('dashboardtagihan');
-Route::post('/tagihan/data_tagihan',           [TagihanController::class, 'buattagihan'])    ->name('buattagihan');
+Route::post('/project/{project}/tagihan',           [TagihanController::class, 'buattagihan'])    ->name('buattagihan.modals');
 Route::get ('/tagihan/{tagihan}/detail',             [TagihanController::class, 'detailshow'])    ->name('detailtagihan');
 
 
 Route::get('/', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login',[LoginController::class,'login'])->name('login.success');
 Route::post('/logout',[LoginController::class,'logout'])->name('logout');
+

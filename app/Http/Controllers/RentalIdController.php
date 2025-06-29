@@ -17,7 +17,7 @@ class RentalIdController extends Controller
         return view('components.project', compact('project'));
     }
 
-    /* POST /rental */
+    // POST rental
     public function tampilrental(Request $request)
     {
         $request->validate([
@@ -26,11 +26,11 @@ class RentalIdController extends Controller
             'pengiriman_detail_id'=> [
                 'required',
                 'exists:pengiriman_detail,id',
-                Rule::unique('rental', 'pengiriman_detail_id'), // hindari double-input
+                Rule::unique('rental', 'pengiriman_detail_id'), 
             ],
         ]);
 
-        // status -> otomatis 'aktif' via default attribute
+        // status otomatis aktif
         Rental::create([
             'asset_id'            => $request->asset_id,
             'project_id'          => $request->project_id,

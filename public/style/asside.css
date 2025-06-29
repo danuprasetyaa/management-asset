@@ -11,6 +11,7 @@
     padding: 1.5rem 1rem;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;      /* scroll internal kalau menu panjang*/
     transition: width 0.3s;
 }
 
@@ -127,8 +128,8 @@
 
 .submenu a.active {
     font-weight: bold;
-    color: var(--primary);
-    background-color: #e6f0ff;
+    color: #fff;
+    background-color: var(--primary);
 }
 
 /* Logout */

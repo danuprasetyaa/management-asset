@@ -41,7 +41,7 @@
                     @foreach ($data_project as $p)
                         <li>
                             <a href="{{ route('components.pengiriman', $p->id) }}"
-                            class="{{ request()->is('pengiriman/'.$p->id.'/halamanpengiriman') ? 'active' : '' }}">
+                            class="{{ request()->is('pengiriman/'.$p->id.'/dashboard-pengiriman') ? 'active' : '' }}">
                                 {{ $p->nama }}
                             </a>
                         </li>

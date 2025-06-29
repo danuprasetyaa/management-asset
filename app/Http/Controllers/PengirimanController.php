@@ -5,76 +5,84 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pengiriman;
-use App\Models\Pengirimandetail;   // pastikan nama model sesuai
-use App\Models\Rental;             // ⬅️  tambahkan
+use App\Models\DetailAsset;   
+use App\Models\Rental;             
 use App\Models\Asset;
+use App\Models\Project;
+use Carbon\Carbon;
 
 class PengirimanController extends Controller
 {
-    /** GET /project/{id}/pengiriman */
-    public function pengirimanByProject($id)
+    public function pengiriman($projectId)
     {
-        $project    = \App\Models\Project::findOrFail($id);
-        $pengiriman = Pengiriman::where('project_id', $id)->with('details')->get();
-        $assets     = Asset::all();
+        $project       = Project::with('rentals')->findOrFail($projectId);
+         // Ambil semua pengiriman yang terkait melalui rental
+        $pengiriman = Pengiriman::with(['detailAsset.asset', 'rental'])
+            ->whereHas('rental', fn($q) => $q->where('project_id', $projectId))
+            ->latest()->get();
 
-        return view('components.pengiriman', compact('project', 'pengiriman', 'assets'));
+        
+
+        $availableUnits = DetailAsset::whereDoesntHave('pengiriman')->get();
+
+        return view('components.pengiriman', compact('project', 'pengiriman', 'availableUnits'));
     }
 
-    /** POST /pengiriman */
     public function kirim(Request $request)
     {
-        // 1. Validasi input
-        $request->validate([
-            'project_id'         => 'required|integer|exists:projects,id',
+           $request->validate([
+            'project_id'         => 'required|exists:projects,id',
+            'detailasset_id'     => 'required|exists:detailasset,id',
             'tanggal_pengiriman' => 'required|date',
             'pic_pengirim'       => 'required|string|max:255',
             'pic_penerima'       => 'required|string|max:255',
-            'asset_id'           => 'required|exists:assets,id',
-            'keterangan'         => 'nullable|string',
         ]);
 
-        // 2. Cegah asset yang sudah pernah dikirim
-        $assetSudahDikirim = Pengirimandetail::where('asset_id', $request->asset_id)->exists();
-        if ($assetSudahDikirim) {
-            return back()->with('error', 'Asset ini sudah pernah dikirim dan tidak bisa digunakan kembali.');
+        // Pastikan unit belum pernah dikirim
+        if (Pengiriman::where('detailasset_id', $request->detailasset_id)->exists()) {
+            return back()->with('error', 'Unit ini sudah pernah dikirim.');
         }
 
         DB::beginTransaction();
         try {
-            /* 3. Simpan pengiriman utama */
+            // Buat pengiriman
             $pengiriman = Pengiriman::create([
-                'project_id'         => $request->project_id,
+                'detailasset_id'     => $request->detailasset_id,
                 'tanggal_pengiriman' => $request->tanggal_pengiriman,
                 'pic_pengirim'       => $request->pic_pengirim,
                 'pic_penerima'       => $request->pic_penerima,
             ]);
 
-            /* 4. Simpan detail pengiriman */
-            $detail = Pengirimandetail::create([
-                'pengiriman_id' => $pengiriman->id,
-                'asset_id'      => $request->asset_id,
-                'jumlah_unit'   => 1,                       // ganti jika ada field jumlah
-                'keterangan'    => $request->keterangan,
-            ]);
+            // Ambil durasi & harga dari project
+            $project = Project::findOrFail($request->project_id);
+            $periodeMulai = Carbon::parse($request->tanggal_pengiriman);
+            $periodeAkhir = $periodeMulai->copy()->addMonths($project->durasi_kontrak);
 
-            /* 5. ⬅️  Buat baris rental otomatis (status default = 'aktif') */
+            // Buat rental
             Rental::create([
-                'asset_id'             => $detail->asset_id,
-                'project_id'           => $pengiriman->project_id,
-                'pengiriman_detail_id' => $detail->id,
-                // kolom status tidak perlu: sudah default 'aktif'
+                'project_id'    => $project->id,
+                'pengiriman_id' => $pengiriman->id,
+                'status'        => 'aktif',
+                'periode_mulai' => $periodeMulai,
+                'periode_ahir'  => $periodeAkhir,
+                'total_tagihan' => $project->harga_sewa,
             ]);
 
             DB::commit();
-            return back()->with('success', 'Pengiriman & rental berhasil disimpan.');
+            return back()->with('success', 'Pengiriman dan rental berhasil disimpan.');
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->withErrors([
-                'error'  => 'Gagal menyimpan pengiriman.',
+                'error' => 'Gagal menyimpan data.',
                 'detail' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function projecttampil(Project $project)
+    {
+
+        return view('components.project', compact('project'));
     }
 }
 

@@ -13,10 +13,12 @@ return new class extends Migration
     {
        Schema::create('rental', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
+            $table->foreignId('pengiriman_id')->constrained('pengiriman')->onDelete('cascade');
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->foreignId('pengiriman_detail_id')->constrained('pengiriman_detail')->onDelete('cascade');
-            $table->enum('status', ['aktif', 'selesai', 'dibatalkan'])->default('aktif');
+            $table->enum('status', ['aktif'])->default('aktif');
+            $table->date('periode_mulai');
+            $table->date('periode_ahir');
+            $table->integer('total_tagihan');
             $table->timestamps();
         });
 

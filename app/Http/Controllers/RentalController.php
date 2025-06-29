@@ -13,13 +13,13 @@ class RentalController extends Controller
     public function rental()
     {
         // Ambil daftar project dari database
-        $data_project = project::all();
+        $data_project = Project::all();
         return view('management-asset.rental', compact('data_project'));  
     }
 
     public function addproject(Request $request)
     {
-        // Validasi data input
+        // Validasi Project Masuk
         $request->validate([
             'nama' => 'required|string|max:250|unique:projects,nama',
             'durasi_kontrak' => 'required|int|max:11',

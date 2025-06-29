@@ -54,29 +54,36 @@
                 <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Id</th>
-                      <th>Project_id</th>
-                      <th>Asset_id</th>
+                      <th>#</th>
+                      <th>ID Pengiriman</th>
+                      <th>Serial Number</th>
+                      <th>Asset</th>
                       <th>Tanggal Pengiriman</th>
-                      <th>Pic Pengiriman</th>
-                      <th>Pic Penerima</th>
-                      <th>Keterangan</th>
+                      <th>PIC Pengirim</th>
+                      <th>PIC Penerima</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($pengiriman as $item)
-                      @foreach($item->details as $detail)
-                      <tr>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->project_id }}</td>
-                        <td>{{ $detail->asset_id ?? 'N/A' }}</td>
-                        <td>{{ $item->tanggal_pengiriman ?? 'N/A' }}</td>
-                        <td>{{ $item->pic_pengirim ?? 'N/A' }}</td>
-                        <td>{{ $item->pic_penerima ?? 'N/A' }}</td>
-                        <td>{{ $detail->keterangan ?? '-' }}</td>
-                      </tr>
-                      @endforeach
-                    @endforeach
+                    @forelse ($pengiriman as $item)
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td>{{ $item->id }}</td>
+
+              {{-- relasi: pengiriman ➜ detailAsset ➜ serialnumber --}}
+              <td>{{ $item->detailAsset->serialnumber ?? 'N/A' }}</td>
+
+              {{-- merk & tipe disimpan di tabel assets  --}}
+              <td>
+                {{ $item->detailAsset->asset->merk  ?? '-' }}
+                {{ $item->detailAsset->asset->tipe  ?? '' }}
+              </td>
+
+              <td>{{ \Carbon\Carbon::parse($item->tanggal_pengiriman)->format('d-m-Y') }}</td>
+              <td>{{ $item->pic_pengirim  }}</td>
+              <td>{{ $item->pic_penerima }}</td>
+            </tr>
+          @empty
+          @endforelse
                   </tbody>
                 </table>
               </div>
@@ -112,13 +119,13 @@
           </div>
           <div class="form-group">
             <label class="form-label">Tanggal Pengiriman*</label>
-            <input type="date" class="form-control" id="tanggal_pengiriman" name="tanggal_pengiriman" required value="{{ old('tanggal_pengiriman') }}">
+            <input type="date" class="form-control" id="tanggal_pengiriman" name="tanggal_pengiriman" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Pic Pengirim*</label>
-            <input type="text" class="form-control" id="pic_pengirim" name="pic_pengirim" required value="{{old('pic_pengirim')}}"> 
+            <input type="text" class="form-control" id="pic_pengirim" name="pic_pengirim" required "> 
           </div>
           <div class="form-group">
             <label class="form-label">Pic Penerima*</label>
@@ -128,20 +135,15 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Asset*</label>
-            <select class="form-control" id="asset_id" name="asset_id" required>
-                <option value="">-- Pilih Asset --</option>
-                @foreach($assets as $asset)
-                    <option value="{{ $asset->id }}" {{ old('asset_id') == $asset->id ? 'selected' : '' }}>
-                        {{ $asset->serialnumber }}
-                    </option>
-                @endforeach
+            <select name="detailasset_id" class="form-select" required>
+              <option value="">-- pilih unit --</option>
+              @foreach($availableUnits as $unit)
+                <option value="{{ $unit->id }}">
+                  {{ $unit->asset->merk }} - {{ $unit->asset->tipe }} | SN: {{ $unit->serialnumber }}
+                </option>
+              @endforeach
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Keterangan*</label>
-            <input type="text" class="form-control" id="keterangan" name="keterangan" required value="{{old('keterangan')}}">
-          </div>
-        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline" onclick="closePengirimanModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Input Pengiriman</button>

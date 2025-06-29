@@ -378,14 +378,8 @@ header h1 {
 /* --- Responsive Adjustments --- */
 
 @media (max-width: 1024px) {
-    .sidebar {
-        width: 220px; /* Sedikit lebih kecil di tablet */
-    }
     .main-content {
         padding: 1rem 1.5rem;
-    }
-    header h1 {
-        font-size: 1.8rem;
     }
     .project-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -394,52 +388,24 @@ header h1 {
 
 @media (max-width: 768px) {
     .sidebar {
-        position: fixed; /* Sidebar menjadi fixed untuk mobile */
+        position: fixed; 
         left: 0;
         top: 0;
         bottom: 0;
         z-index: 100;
-        transform: translateX(-100%); /* Sembunyikan default */
-        width: 250px; /* Berikan lebar tetap saat terbuka */
+        transform: translateX(-100%); 
     }
 
     .sidebar.active {
-        transform: translateX(0); /* Tampilkan sidebar saat aktif */
+        transform: translateX(0); 
     }
 
     .sidebar-toggle {
-        display: block; /* Tampilkan tombol toggle di header mobile */
+        display: block; 
     }
 
     .main-content {
         padding: 1rem;
-    }
-
-    header {
-        flex-wrap: wrap; /* Izinkan header wrap elemen */
-        justify-content: flex-start;
-        gap: 15px;
-    }
-    header h1 {
-        flex-basis: 100%; /* Judul mengambil seluruh lebar */
-        text-align: center;
-        order: -1; /* Pindahkan judul ke atas jika perlu */
-        font-size: 1.5rem;
-    }
-    .user-menu {
-        flex-grow: 1;
-        justify-content: flex-end; /* Dorong menu user ke kanan */
-    }
-
-    .add-new-project-section {
-        justify-content: center; /* Tombol tambah project di tengah */
-        padding: 0;
-    }
-
-    .btn-add-project {
-        width: 100%; /* Buat tombol full width di mobile */
-        text-align: center;
-        justify-content: center;
     }
 
     .project-grid {
@@ -467,16 +433,3 @@ header h1 {
     }
 }
 
-/* Tambahan CSS jika Anda ingin menargetkan class khusus untuk gambar di nav-link */
-.nav-link .icon img {
-    /* Pastikan filter ini sesuai dengan warna default icon Anda */
-    /* Misalnya, jika icon Anda hitam, dan Anda ingin jadi merah saat tidak aktif */
-    /* filter: brightness(0) saturate(100%) invert(27%) sepia(87%) saturate(5061%) hue-rotate(345deg) brightness(97%) contrast(101%); */
-    /* Atau jika icon Anda abu-abu dan ingin menjadi hitam */
-    /* filter: grayscale(100%); */
-}
-
-/* Jika Anda ingin panah dropdown juga berubah warna saat parent aktif */
-.nav-item.has-submenu.active-parent > .nav-link .dropdown-arrow {
-    /* filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%); /* Membuat panah putih */
-}

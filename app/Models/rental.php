@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class rental extends Model
+class Rental extends Model
 {
     use HasFactory;
 
     protected $table = 'rental'; 
     
     protected $fillable = [
-        'asset_id',
+        'id',
         'project_id',
-        'pengiriman_detail_id',
+        'pengiriman_id',
         'status',
+        'periode_mulai',
+        'periode_ahir',
+        'total_tagihan',
     ];
 
     // default otomatis
@@ -23,9 +26,9 @@ class rental extends Model
         'status' => 'aktif',
     ];
 
-    public function asset()
+    public function pengiriman()
     {
-        return $this->belongsTo(Asset::class);
+        return $this->belongsTo(Pengiriman::class);
     }
 
     public function project()
@@ -33,10 +36,8 @@ class rental extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function pengirimanDetail()
+    public function tagihan()
     {
-        return $this->belongsTo(PengirimanDetail::class);
-    }
-
-    public function pengiriman()   { return $this->hasOne(Pengiriman::class); }
+        return $this->hasOne(Tagihan::class);
+    } 
 }

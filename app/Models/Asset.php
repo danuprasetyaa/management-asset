@@ -12,7 +12,12 @@ class Asset extends Model
     protected $table = 'assets';
 
     protected $fillable = [
-        'id','merk','type','serialnumber','spesifikasi','tanggal_pembelian','harga_pembelian','kondisi'
+        'id','merk','type','spesifikasi'
     ];
+
+    public function detailassets()
+    {
+        return $this->hasMany(DetailAsset::class);
+    }
 
 }

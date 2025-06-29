@@ -56,29 +56,23 @@
                       <th>Id</th>
                       <th>Merk</th>
                       <th>Type</th>
-                      <th>Serialnumber</th>
                       <th>Spesifikasi</th>
-                      <th>Harga Pembelian</th>
-                      <th>Tanggal Pembelian</th>
+                      <th>Serialnumber</th>
                       <th>Kondisi</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($data as $asset) 
+                    @foreach($data as $asset)
+                    @foreach($asset->detailassets as $detail)
                     <tr>
                       <td>{{$asset ->id}}</td>
                       <td>{{$asset ->merk}}</td>
                       <td>{{$asset ->type}}</td>
-                      <td>{{$asset ->serialnumber}}</td>
                       <td>{{$asset ->spesifikasi}}</td>
-                      <td>{{$asset ->tanggal_pembelian}}</td>
-                      <td>{{$asset ->harga_pembelian}}</td>
-                      <td>{{$asset ->kondisi}}</td>
-                      <td>
-                        <button class="btn btn-danger">Edit</button>
-                      </td>
+                      <td>{{$detail ->serialnumber}}</td>
+                      <td>{{$detail ->kondisi}}</td>
                     </tr>
+                    @endforeach
                     @endforeach
                   </tbody>
                 </table>
@@ -115,48 +109,34 @@
              <label for="merk" class="form-label">Merk*</label>
             <select class="form-control" id="merk" name="merk" required>
               <option value="">Merk</option>
-               <option value="Asus" {{ old('merk') == 'Asus' ? 'selected' : '' }}>Asus</option>
-              <option value="Acer" {{ old('merk') == 'Acer' ? 'selected' : '' }}>Acer</option>
-              <option value="Dell" {{ old('merk') == 'Dell' ? 'selected' : '' }}>Dell</option>
-              <option value="Hp" {{ old('merk') == 'Hp' ? 'selected' : '' }}>Hp</option>
-              <option value="Lenovo" {{ old('merk') == 'Lenovo' ? 'selected' : '' }}>Lenovo</option>
+               @foreach (['Asus','Acer','Dell','Hp','Lenovo'] as $m)
+                <option value="{{ $m }}">{{ $m }}</option>
+              @endforeach
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Type*</label>
-            <input type="text" class="form-control" id="type" name="type" required value="{{old('type')}}">
+            <input type="text" class="form-control" id="type" name="type" required>
           </div>
         </div>
         
         <div class="form-row">
-          <div class="form-group">
-            <label for="serialnumber" class="form-label">Serialnumber*</label>
-            <input type="text" class="form-control" id="serialnumber" name="serialnumber" required value="{{ old('serialnumber') }}">
-          </div>
           <div class="form-group">
             <label class="form-label">Spesifikasi*</label>
-            <input type="text" class="form-control" id="spesifikasi" name="spesifikasi" required value="{{old('spesifikasi')}}">
+            <input type="text" class="form-control" id="spesifikasi" name="spesifikasi" required>
+          </div>
+          <div class="form-group">
+            <label for="serialnumber" class="form-label">Serialnumber*</label>
+            <input type="text" class="form-control" id="serialnumber" name="serialnumber" required>
           </div>
         </div>
-        
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Purchase Date*</label>
-            <input type="date" class="form-control" id="tanggal_pembelian" name="tanggal_pembelian" required value="{{old('tanggal_pembelian')}}">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Purchase Price*</label>
-            <input type="text" class="form-control" id="harga_pembelian" name="harga_pembelian" placeholder="Rp 0" required value="{{old('harga_pembelian')}}">
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="kondisi" class="form-label">Condition*</label>
+            <label for="kondisi" class="form-label">Kondisi*</label>
             <select class="form-control" id="kondisi" name="kondisi" required>
               <option value="">Pilih Kondisi</option>
-               <option value="Normal" {{ old('kondisi') == 'Normal' ? 'selected' : '' }}>Normal</option>
-              <option value="Rusak" {{ old('kondisi') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
+               <option value="Normal">Normal</option>
+              <option value="Rusak">Rusak</option>
             </select>
           </div>
         </div>

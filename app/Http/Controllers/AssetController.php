@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Asset;
+use App\Models\DetailAsset;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -14,8 +16,8 @@ class AssetController extends Controller
         public function asset()
     {
         //Menampilkan data Asset
-        $data = asset::all();
-        return view('management-asset.asset', compact('data'));
+        $data = Asset::with('detailassets')->get();
+        return view('management-asset/asset', compact('data'));
     }
 
     public function addasset(Request $request)
@@ -27,26 +29,32 @@ class AssetController extends Controller
         $request->validate([
             'merk'=>['required', Rule::in($validmerk)],
             'type'=>'required|string|max:50',
-            'serialnumber'=>'required|string|max:50|unique:assets,serialnumber',
+            'serialnumber'=>'required|string|max:50|unique:detailasset,serialnumber',
             'spesifikasi'=>'required|string|max:50',
-            'tanggal_pembelian'=>'required|date',
-            'harga_pembelian'=>'required|numeric',
             'kondisi'=>['required',Rule::in($validkondisi)],
         ]);
 
-        $asset =new asset();
-        
-            $asset->merk = $request->merk;
-            $asset->type = $request->type;
-            $asset->serialnumber = $request->serialnumber;
-            $asset->spesifikasi = $request->spesifikasi;
-            $asset->tanggal_pembelian = $request->tanggal_pembelian;
-            $asset->harga_pembelian = $request->harga_pembelian;
-            $asset->kondisi = $request->kondisi;
+         DB::transaction(function () use ($request) {
 
-            $asset->save();
+            $asset = Asset::firstOrCreate(
+                [
+                    'merk'        => $request->merk,
+                    'type'        => $request->type,
+                    'spesifikasi' => $request->spesifikasi,
+                ]
+            );
 
-            return redirect()->route('management-asset/asset')->with('success','Asset Berhasil Ditambahkan');
+            
+            $detail = DetailAsset::create([
+                'asset_id'     => $asset->id,
+                'serialnumber' => $request->serialnumber,
+                'kondisi'      => $request->kondisi,
+            ]);
+        });
+
+        return redirect()
+            ->route('management-asset/asset')  
+            ->with('success', 'Asset berhasil ditambahkan');
         }
 }   
 

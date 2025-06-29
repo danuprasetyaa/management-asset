@@ -5,24 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class pengiriman extends Model
+class Pengiriman extends Model
 {
     use HasFactory;
 
     protected $table = 'pengiriman';
 
     protected $fillable = [
-        'id','project_id','tanggal_pengiriman','pic_pengirim','pic_penerima',
+        'id','detailasset_id','tanggal_pengiriman','pic_pengirim','pic_penerima',
     ];
 
-    public function project()
+    public function detailasset()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(DetailAsset::class);
     }
-
-      public function details()
-    {
-        return $this->hasMany(Pengirimandetail::class, 'pengiriman_id');
+    public function rental()      
+    { 
+        return $this->hasOne(Rental::class); 
     }
-
 }

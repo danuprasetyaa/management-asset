@@ -15,11 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('merk',['Asus','Acer','Dell','Hp','Lenovo']);
             $table->string('type',50);
-            $table->string('serialnumber', 50)->unique();
             $table->string('spesifikasi',150);
-            $table->date('tanggal_pembelian');
-            $table->decimal('harga_pembelian',15,2);
-            $table->enum('kondisi',['normal','rusak','maintenance']);
             $table->timestamps();
         });
     }

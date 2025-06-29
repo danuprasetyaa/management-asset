@@ -10,12 +10,12 @@
 <body>
     <div class="container">
         
-    @include('components/asside')
+     @include('components/asside')
 
         <main class="main-content" >
             <header>
-                <button id="toggleSidebar" class="sidebar-toggle"><img src="{{ asset('image/list.png') }}" alt="List" ></button>
-                <h1>Rental Overview</h1> {{-- Mengubah H1 agar lebih umum --}}
+                <button id="toggleSidebar" class="sidebar-toggle"><img src="{{ asset('image/list.png') }}" alt="List"></button>
+                <h1>Rental Active</h1>
                 <div class="user-menu">
                     <span classs="notification"><img src="{{ asset('image/notification.png') }}" alt="notification"></span>
                     <div class="user-profile">
@@ -106,6 +106,6 @@
         </main>
     </div>
     <script src="{{ asset('js/asside.js') }}"></script>
-    <script src="js/rental.js"></script>
+    <script src="{{ asset('js/rental.js') }}"></script>
 </body>
 </html>

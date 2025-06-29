@@ -43,26 +43,30 @@
               <div class="table-responsive">
                 <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                   <thead>
-                    <tr>
-                      <th>Id</th>
-                      <th>Asset_Id</th>
-                      <th>Project_Id</th>
-                      <th>Pengiriman_detail_Id</th>   
-                      <th>Status</th>  
-                    </tr>
+                    <thead>
+      <tr>
+        <th>#</th>
+        <th>Project</th>
+        <th>Pengiriman</th>
+        <th>Status</th>
+        <th>Periode</th>
+        <th>Total (Rp)</th>
+      </tr>
+    </thead>
                   </thead>
                   <tbody>
                   @forelse ($project->rentals as $r)
-                    <tr>
-                      <td>{{ $r->id }}</td>                        
-                      <td>{{ $r->asset_id }}</td>                  
-                      <td>{{ $r->project_id }}</td>                
-                      <td>{{ $r->pengiriman_detail_id ?? '-' }}</td> 
-                      <td>{{ $r->status }}</td>                    
-                    </tr>
-                  @empty
-                    <tr><td colspan="6" class="text-center">Tidak ada data rental…</td></tr>
-                  @endforelse
+      <tr>
+        <td>{{ $r->id }}</td>
+        <td>{{ $project->nama }}</td>
+        <td>{{ $r->pengiriman_id }}</td>        {{-- FK ke tabel pengiriman --}}
+        <td>{{ ucfirst($r->status) }}</td>
+        <td>{{ $r->periode_mulai }} – {{ $r->periode_ahir }}</td>
+        <td>{{ number_format($r->total_tagihan,0,',','.') }}</td>
+      </tr>
+    @empty
+      <tr><td colspan="6" class="text-center">Tidak ada data rental…</td></tr>
+    @endforelse
                   </tbody>
                 </table>
               </div>

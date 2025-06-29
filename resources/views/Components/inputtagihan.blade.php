@@ -40,92 +40,85 @@
                     <button class="add-project-close" onclick="closeModalTagihan()">&times;</button>
                     </div>
                     <div class="add-project-body">
-                    <form method="post" action="{{ route('buattagihan') }}">
-                        @csrf
-                        
-                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                    <form action="{{ route('buattagihan.modals', ['project' => $project->id]) }}" method="POST">
+                         @csrf
 
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+    <input type="hidden" name="project_id" value="{{ $project->id }}">
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Nomor Invoice*</label>
-                                <input type="text" class="form-control" name="nomor_invoice"
-                                    value="{{ old('nomor_invoice') }}" required>
-                            </div>
+    {{-- ===== VALIDATION ERROR ===== --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-                            <div class="form-group">
-                                <label class="form-label">Keterangan*</label>
-                                <input type="text" class="form-control" name="keterangan"
-                                    value="{{ old('keterangan') }}" required>
-                            </div>
+    {{-- ===== BARIS 1 ===== --}}
+    <div class="form-row">
+        <input type="text" name="nomor_invoice" class="form-control" readonly>
 
-                            <div class="form-group">
-                                <label class="form-label">Tanggal Tagihan*</label>
-                                <input type="date" class="form-control" name="tanggal_tagihan"
-                                    value="{{ old('tanggal_tagihan') }}" required>
-                            </div>
-                     </div>
-                        <div class="form-row">
-                         <div class="form-group">
-                                @if($rental)
-                                    {{-- hidden rental_id & isi otomatis --}}
-                                    <input type="hidden" name="rental_id" value="{{ $rental->id }}">
 
-                                    {{-- tampilkan info singkat saja, bukan dropdown --}}
-                                    <p><strong>Rental ID:</strong> {{ $rental->id }}</p>
+        <div class="form-group">
+            <label class="form-label">Keterangan*</label>
+            <input type="text"
+                   class="form-control"
+                   name="keterangan"
+                   id="keterangan"
+                   value="{{ old('keterangan') }}"
+                   required>
+        </div>
+    </div>
 
-                                    <div class="form-group">
-                                        <label class="form-label">Jumlah Unit*</label>
-                                            <input  type="number" class="form-control"
-                                                    name="jumlah_unit" readonly
-                                                    value="{{ $unit }}">
-                                    </div>
+    {{-- ===== BARIS 2 ===== --}}
+    <div class="form-row">
+        <div class="form-group">
+            <label>Durasi Tagih*</label>
+            <input type="text"
+                   name="durasi_tagih"
+                   id="durasi_tagih"
+                   class="form-control"
+                   value="{{ old('durasi_tagih') }}"
+                   required>
+        </div>
 
-                                    {{-- Total Tagihan (readonly) --}}
-                                    <div class="form-group">
-                                        <label class="form-label">Total Tagihan*</label>
-                                            <input  type="text" class="form-control"
-                                                    name="total_tagihan" readonly
-                                                    value="{{ number_format($total, 0, ',', '.') }}">
-                                    </div>
-                                @else
-                                    <p class="alert alert-warning">
-                                        Project ini belum memiliki rental. Silakan tambahkan rental dahulu.
-                                    </p>
-                                @endif
-                            </div>
-                         
-                        </div>
+        <div class="form-group">
+            <label class="form-label">Tanggal Tagihan*</label>
+            <input type="date"
+                   class="form-control"
+                   name="tanggal_tagihan"
+                   id="tanggal_tagihan"
+                   value="{{ old('tanggal_tagihan') }}"
+                   required>
+        </div>
+    </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Periode Mulai*</label>
-                                <input type="date" class="form-control" name="periode_mulai"
-                                    value="{{ old('periode_mulai') }}" required>
-                            </div>
+    {{-- ===== INFO READ-ONLY ===== --}}
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Jumlah Unit</label>
+            <input type="number"
+                   class="form-control"
+                   value="{{ $totalUnit }}"
+                   readonly>
+        </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Periode Akhir*</label>
-                                <input type="date" class="form-control" name="periode_ahir"
-                                    value="{{ old('periode_ahir') }}" required>
-                            </div>
+        <div class="form-group col-md-6">
+            <label>Grand Total (Rp)</label>
+            <input type="text"
+                   class="form-control"
+                   value="{{ number_format($grandTotal, 0, ',', '.') }}"
+                   readonly>
+        </div>
+    </div>
 
-                            
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline" onclick="closeModalTagihan()">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Buat Tagihan</button>
-                        </div>
+    {{-- ===== FOOTER ===== --}}
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModalTagihan()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Buat Tagihan</button>
+    </div>
                     </form>
 
                     </div>
@@ -143,24 +136,26 @@
                         @endif
 
                         <div class="project-grid">
-                        @forelse ($data_tagihan as $detail)
-                            <div class="project-card">
-                                <h3>
-                                    {{ \Carbon\Carbon::parse($detail->tagihan->tanggal_tagihan)->translatedFormat('F Y') }}
-                                </h3>
-                                <p>Tanggal Tagihan:
-                                {{ \Carbon\Carbon::parse($detail->tagihan->tanggal_tagihan)->format('d-m-Y') }}
-                                </p>
-                                <p>Jumlah Unit: {{ $detail->jumlah_unit }}</p>
-                                <p>Total Tagihan:
-                                 Rp {{ number_format($detail->total_tagihan, 0, ',', '.') }}
-                                </p>
+                       @forelse ($data_tagihan as $detail)
+    <div class="project-card">
+        {{-- Bulan & tahun tagihan --}}
+        <h3>{{ \Carbon\Carbon::parse($detail->tanggal_tagihan)->translatedFormat('F Y') }}</h3>
 
-                                <a href="{{ route('detailtagihan', $detail->tagihan_id) }}">Detail</a>
-                            </div>
-                        @empty
-                            <p>Tidak ada tagihan ditemukan.</p>
-                        @endforelse
+        <p>Tanggal Tagihan:
+           {{ \Carbon\Carbon::parse($detail->tanggal_tagihan)->format('d-m-Y') }}
+        </p>
+
+        <p>Jumlah Unit: {{ $detail->jumlah_unit }}</p>
+
+        <p>Total Tagihan:
+           Rp {{ number_format($detail->grand_total, 0, ',', '.') }}
+        </p>
+
+        <a href="{{ route('detailtagihan', $detail->id) }}">Detail</a>
+    </div>
+@empty
+    <p>Tidak ada tagihan ditemukan.</p>
+@endforelse
                     </div>
 
 

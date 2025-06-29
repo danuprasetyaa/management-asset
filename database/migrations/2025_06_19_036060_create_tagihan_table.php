@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tagihan_detail', function (Blueprint $table) {
+        Schema::create('tagihan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tagihan_id')->constrained('tagihan')->onDelete('cascade');
             $table->foreignId('rental_id')->constrained('rental')->onDelete('cascade');
-            $table->date('periode_mulai');
-            $table->date('periode_ahir');
-            $table->unsignedInteger('jumlah_unit');
-            $table->decimal('total_tagihan', 15, 2);
+            $table->integer('nomor_invoice')->unique();
+            $table->string('keterangan');
+            $table->date('tanggal_tagihan');
+            $table->integer('jumlah_unit');
+            $table->string('durasi_tagih');
+            $table->integer('grand_total');
             $table->timestamps();
         });
-
-
 
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tagihan_detail');
+        Schema::dropIfExists('tagihan');
     }
 };

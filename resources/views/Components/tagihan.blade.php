@@ -42,31 +42,40 @@
               <div class="table-responsive">
                 <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
                   <thead>
-                    <tr>
-                        <th>Rental ID</th>
-                        <th>Asset ID</th>
-                        <th>Periode Mulai</th>
-                        <th>Periode Ahir</th>
-                        <th>Harga Sewa</th>
-                        <th>Total Tagihan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($tagihan->details as $d)
-                        @php
-                            $peng = $d->rental->pengirimanDetail;   // singkat
-                        @endphp
-                        <tr>
-                            <td>{{ $d->rental_id }}</td>
-                            <td>{{ $d->rental->asset_id ?? 'N/A' }}</td>
-                            <td>{{ $d->periode_mulai ? \Carbon\Carbon::parse($d->periode_mulai)->translatedFormat('d F Y') : '-' }}</td>
-                            <td> {{ $d->periode_ahir ? \Carbon\Carbon::parse($d->periode_ahir)->translatedFormat('d F Y') : '-' }}
-                            </td>
-                            <td>Rp {{ number_format($d->rental->project->harga_sewa ?? 0, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($d->total_tagihan ?? 0, 0, ',', '.') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                    <thead>
+      <tr>
+        <th>#</th>
+        <th>Project</th>
+        <th>Pengiriman</th>
+        <th>Status</th>
+        <th>Periode</th>
+        <th>Total (Rp)</th>
+      </tr>
+    </thead>
+                  </thead>
+                  <tbody>
+                 @forelse ($rentals as $r)
+    <tr>
+      <td>{{ $loop->iteration }}</td>
+      <td>{{ $project->nama }}</td>
+      <td>{{ $r->pengiriman_id }}</td>
+      <td>{{ ucfirst($r->status) }}</td>
+      <td>{{ $r->periode_mulai }} – {{ $r->periode_ahir }}</td>
+      <td>{{ number_format($r->total_tagihan, 0, ',', '.') }}</td>
+    </tr>
+  @empty
+    <tr><td colspan="6" class="text-center">Tidak ada data rental…</td></tr>
+  @endforelse 
+
+    <tr class="font-weight-bold">
+    <td colspan="5" class="text-right">Jumlah Unit :</td>
+    <td>{{ $totalUnit }}</td>
+  </tr>
+  <tr class="font-weight-bold">
+    <td colspan="5" class="text-right">Grand Total (Rp) :</td>
+    <td>{{ number_format($grandTotal,0,',','.') }}</td>
+  </tr>
+                  </tbody>
                 </table>
               </div>
      

@@ -44,32 +44,53 @@
                             <h3>Total Rent</h3>
                         </div>
                         <div class="card-content">
-                            <h2>550</h2>
+                            <h2>{{$totalrental ?? 0}}</h2>
                             <p class="trend positive">+6.8% from last month</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="charts">
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h3>Total Overview</h3>
-                            <a href="#" class="view-all">View all</a>
-                        </div>
-                        <canvas id="barChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-header">
-                            <h3>Rent Distributions</h3>
-                            <a href="#" class="view-all">View all</a>
-                        </div>
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
+    <div class="charts">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Total Overview</h3>
+                <a href="#" class="view-all">View all</a>
+            </div>
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Rent Distributions – {{ $monthName }} {{ $year }}</h3>
+                <a href="#" class="view-all">View all</a>
+            </div>
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
             </div>
         </main>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+            integrity="sha384-oqVMqYcWvssLyxbiyE9f6JRRVJc2xcZ2tM1SokC51TIf/MRW6qI9V4qNgHRLoX3R"
+            crossorigin="anonymous"></script>
+
+    <script>
+        window.dashboardChartData = {
+            /* bar */
+            barLabels   : @json($months),
+            assetCounts : @json($assetPerMonth),
+            rentCounts  : @json($rentPerMonth),
+
+            /* pie */
+            pieLabels : @json($pieLabels),
+            pieCounts : @json($pieData),
+            pieColors : @json($pieColors)
+        };
+    </script>
+
     <script src="{{ asset('js/asside.js') }}"></script>
-    <script src="js/dasboard.js"></script>
+    <script src="{{ asset('js/dasboard.js') }}"></script>
+
 </body>
 </html>
